@@ -1,14 +1,46 @@
 import Habit from "../models/Habit.js";
 import Progress from "../models/Progress.js";
 
+const dayNames = {
+  1: "Sunday",
+  2: "Monday",
+  3: "Tuesday",
+  4: "Wednesday",
+  5: "Thursday",
+  6: "Friday",
+  7: "Saturday"
+};
+
+const monthNames = {
+  1: "January",
+  2: "February",
+  3: "March",
+  4: "April",
+  5: "May",
+  6: "June",
+  7: "July",
+  8: "August",
+  9: "September",
+  10: "October",
+  11: "November",
+  12: "December"
+};
+
 export const getLongestStreak = async (req, res) => {
   try {
     const habit = await Habit.findOne().sort({ streak: -1 });
 
     res.json({
       success: true,
-      message: "Habit with the longest streak",
+      message: "Habit with the longest current streak",
       data: habit
+        ? {
+            name: habit.name,
+            streak: habit.streak,
+            category: habit.category,
+            difficulty: habit.difficulty
+          }
+        : null
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -29,10 +61,17 @@ export const getBestDay = async (req, res) => {
       { $limit: 1 }
     ]);
 
+    const bestDay = result[0];
+
     res.json({
       success: true,
-      message: "Best day of week",
-      data: result[0] || null
+      message: "Most productive day of the week",
+      data: bestDay
+        ? {
+            dayName: dayNames[bestDay._id],
+            count: bestDay.count
+          }
+        : null
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -56,10 +95,18 @@ export const getBestMonth = async (req, res) => {
       { $limit: 1 }
     ]);
 
+    const bestMonth = result[0];
+
     res.json({
       success: true,
-      message: "Best month",
-      data: result[0] || null
+      message: "Most productive month",
+      data: bestMonth
+        ? {
+            monthName: monthNames[bestMonth._id.month],
+            year: bestMonth._id.year,
+            completions: bestMonth.completions
+          }
+        : null
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -69,10 +116,10 @@ export const getBestMonth = async (req, res) => {
 export const getAbandonedHabits = async (req, res) => {
   try {
     const sevenDaysAgo = new Date();
-
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const result = await Progress.aggregate([
+      { $match: { completed: true } },
       {
         $group: {
           _id: "$habitId",
@@ -83,13 +130,36 @@ export const getAbandonedHabits = async (req, res) => {
         $match: {
           lastCompleted: { $lt: sevenDaysAgo }
         }
-      }
+      },
+      {
+        $lookup: {
+          from: "habits",
+          localField: "_id",
+          foreignField: "_id",
+          as: "habit"
+        }
+      },
+      { $unwind: "$habit" }
     ]);
+
+    const data = result.map((item) => {
+      const daysSince = Math.floor(
+        (new Date() - item.lastCompleted) / (1000 * 60 * 60 * 24)
+      );
+
+      return {
+        name: item.habit.name,
+        category: item.habit.category,
+        lastCompleted: item.lastCompleted.toISOString().split("T")[0],
+        daysSince
+      };
+    });
 
     res.json({
       success: true,
-      count: result.length,
-      data: result
+      message: "Abandoned habits that were not completed for more than 7 days",
+      count: data.length,
+      data
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -99,6 +169,7 @@ export const getAbandonedHabits = async (req, res) => {
 export const getMoodCorrelation = async (req, res) => {
   try {
     const result = await Progress.aggregate([
+      { $match: { completed: true, mood: { $ne: null } } },
       {
         $lookup: {
           from: "habits",
@@ -114,13 +185,20 @@ export const getMoodCorrelation = async (req, res) => {
           averageMood: { $avg: "$mood" },
           totalCompletions: { $sum: 1 }
         }
-      }
+      },
+      { $sort: { _id: 1 } }
     ]);
+
+    const data = result.map((item) => ({
+      difficulty: item._id,
+      averageMood: Number(item.averageMood.toFixed(1)),
+      totalCompletions: item.totalCompletions
+    }));
 
     res.json({
       success: true,
-      message: "Mood correlation",
-      data: result
+      message: "Average mood by habit difficulty",
+      data
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -130,6 +208,7 @@ export const getMoodCorrelation = async (req, res) => {
 export const getPerfectDay = async (req, res) => {
   try {
     const result = await Progress.aggregate([
+      { $match: { completed: true, mood: { $ne: null } } },
       {
         $group: {
           _id: {
@@ -147,14 +226,22 @@ export const getPerfectDay = async (req, res) => {
           averageMood: { $gt: 4 }
         }
       },
-      { $sort: { completions: -1 } },
+      { $sort: { completions: -1, averageMood: -1 } },
       { $limit: 1 }
     ]);
 
+    const perfectDay = result[0];
+
     res.json({
       success: true,
-      message: "Perfect day",
-      data: result[0] || null
+      message: "Perfect day with maximum habits and good mood",
+      data: perfectDay
+        ? {
+            date: perfectDay._id,
+            completions: perfectDay.completions,
+            averageMood: Number(perfectDay.averageMood.toFixed(1))
+          }
+        : null
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -165,26 +252,41 @@ export const getGoldenMean = async (req, res) => {
   try {
     const habits = await Habit.find();
 
-    const avg =
+    if (habits.length === 0) {
+      return res.json({
+        success: true,
+        message: "No habits found",
+        data: null
+      });
+    }
+
+    const averageCompletions =
       habits.reduce((sum, habit) => sum + habit.totalCompletions, 0) /
       habits.length;
 
-    let closest = null;
-    let minDiff = Infinity;
+    let closestHabit = null;
+    let smallestDifference = Infinity;
 
     habits.forEach((habit) => {
-      const diff = Math.abs(habit.totalCompletions - avg);
+      const difference = Math.abs(habit.totalCompletions - averageCompletions);
 
-      if (diff < minDiff) {
-        minDiff = diff;
-        closest = habit;
+      if (difference < smallestDifference) {
+        smallestDifference = difference;
+        closestHabit = habit;
       }
     });
 
     res.json({
       success: true,
-      averageCompletions: avg,
-      habit: closest
+      message: "Habit closest to average completions",
+      data: {
+        habit: {
+          name: closestHabit.name,
+          totalCompletions: closestHabit.totalCompletions
+        },
+        averageCompletions: Number(averageCompletions.toFixed(1)),
+        difference: Number(smallestDifference.toFixed(1))
+      }
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -199,10 +301,18 @@ export const getBurnoutHabits = async (req, res) => {
       }
     });
 
+    const data = habits.map((habit) => ({
+      name: habit.name,
+      streak: habit.streak,
+      totalCompletions: habit.totalCompletions,
+      difference: habit.streak - habit.totalCompletions
+    }));
+
     res.json({
       success: true,
-      count: habits.length,
-      data: habits
+      message: "Habits at risk of burnout",
+      count: data.length,
+      data
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -222,6 +332,7 @@ export const getDashboardStats = async (req, res) => {
     });
 
     const mood = await Progress.aggregate([
+      { $match: { completed: true, mood: { $ne: null } } },
       {
         $group: {
           _id: null,
@@ -232,11 +343,20 @@ export const getDashboardStats = async (req, res) => {
 
     res.json({
       success: true,
+      message: "Dashboard statistics",
       data: {
         totalHabits,
         totalCompletions,
-        bestHabit,
-        averageMood: mood[0]?.averageMood || 0
+        bestHabit: bestHabit
+          ? {
+              name: bestHabit.name,
+              bestStreak: bestHabit.bestStreak,
+              category: bestHabit.category
+            }
+          : null,
+        averageMood: mood[0]?.averageMood
+          ? Number(mood[0].averageMood.toFixed(1))
+          : 0
       }
     });
   } catch (error) {
