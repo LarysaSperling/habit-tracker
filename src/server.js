@@ -9,6 +9,7 @@ import { connectDB } from "./config/db.js";
 import habitRoutes from "./routes/habitRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 import Message from "./models/Message.js";
 
@@ -20,7 +21,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "DELETE"]
   }
 });
 
@@ -30,26 +31,10 @@ app.use(express.json());
 app.use("/habits", habitRoutes);
 app.use("/stats", statsRoutes);
 app.use("/auth", authRoutes);
+app.use("/messages", messageRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Habit Tracker API is running" });
-});
-
-app.get("/messages", async (req, res) => {
-  try {
-    const messages = await Message.find().sort({ createdAt: 1 });
-
-    res.json({
-      success: true,
-      count: messages.length,
-      data: messages
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
 });
 
 io.on("connection", (socket) => {
