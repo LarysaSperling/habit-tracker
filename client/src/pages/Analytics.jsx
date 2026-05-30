@@ -63,11 +63,7 @@ function Analytics() {
   }
 
   if (error) {
-    return (
-      <div className="rounded-2xl border border-rose-800 bg-rose-950 p-6 text-rose-300">
-        {error}
-      </div>
-    );
+    return <div className="card border-rose-800 text-rose-300">{error}</div>;
   }
 
   return (
@@ -80,138 +76,122 @@ function Analytics() {
       </section>
 
       {stats.mood && stats.mood.length > 0 && (
-        <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
+        <div className="card mb-8">
           <HabitChart moodCorrelation={stats.mood} />
         </div>
       )}
 
       <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-violet-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             🔥 Longest Streak
           </p>
-
-          <h2 className="mt-4 text-2xl font-bold text-white">
+          <h2 className="mt-4 text-2xl font-bold">
             {stats.longest?.name || "No data"}
           </h2>
-
           <p className="mt-2 text-5xl font-bold text-violet-400">
             {stats.longest?.streak || 0}
           </p>
-
-          <p className="mt-1 text-sm text-slate-400">days</p>
+          <p className="mt-1 text-sm muted">days</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-sky-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             📅 Best Day
           </p>
-
-          <h2 className="mt-4 text-2xl font-bold text-white">
+          <h2 className="mt-4 text-2xl font-bold">
             {stats.bestDay?.dayName || "No data"}
           </h2>
-
           <p className="mt-2 text-5xl font-bold text-sky-400">
             {stats.bestDay?.count || 0}
           </p>
-
-          <p className="mt-1 text-sm text-slate-400">completions</p>
+          <p className="mt-1 text-sm muted">completions</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-emerald-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             🏆 Best Month
           </p>
-
-          <h2 className="mt-4 text-2xl font-bold text-white">
+          <h2 className="mt-4 text-2xl font-bold">
             {stats.bestMonth
               ? `${stats.bestMonth.monthName} ${stats.bestMonth.year}`
               : "No data"}
           </h2>
-
           <p className="mt-2 text-5xl font-bold text-emerald-400">
             {stats.bestMonth?.completions || 0}
           </p>
-
-          <p className="mt-1 text-sm text-slate-400">completions</p>
+          <p className="mt-1 text-sm muted">completions</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-amber-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             ⭐ Perfect Day
           </p>
 
           {stats.perfectDay ? (
             <>
-              <h2 className="mt-4 text-2xl font-bold text-white">
+              <h2 className="mt-4 text-2xl font-bold">
                 {stats.perfectDay.date}
               </h2>
-
-              <p className="mt-2 text-slate-300">
+              <p className="mt-2 muted">
                 {stats.perfectDay.completions} completions
               </p>
-
               <p className="mt-1 text-amber-400">
                 Average mood: {stats.perfectDay.averageMood}
               </p>
             </>
           ) : (
-            <p className="mt-4 text-slate-400">No data</p>
+            <p className="mt-4 muted">No data</p>
           )}
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-pink-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             ⚖️ Golden Mean
           </p>
 
           {stats.goldenMean ? (
             <>
-              <h2 className="mt-4 text-2xl font-bold text-white">
+              <h2 className="mt-4 text-2xl font-bold">
                 {stats.goldenMean.habit?.name || "No data"}
               </h2>
-
-              <p className="mt-2 text-slate-300">
+              <p className="mt-2 muted">
                 Habit completions:{" "}
                 {stats.goldenMean.habit?.totalCompletions || 0}
               </p>
-
               <p className="mt-1 text-pink-400">
                 Average: {stats.goldenMean.averageCompletions}
               </p>
             </>
           ) : (
-            <p className="mt-4 text-slate-400">No data</p>
+            <p className="mt-4 muted">No data</p>
           )}
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg transition hover:border-rose-500">
-          <p className="text-sm uppercase tracking-wider text-slate-400">
+        <div className="card">
+          <p className="text-sm uppercase tracking-wider muted">
             😵 Burnout Habits
           </p>
 
           {stats.burnout && stats.burnout.length > 0 ? (
             <ul className="mt-4 space-y-3">
               {stats.burnout.map((habit) => (
-                <li
-                  key={habit.name}
-                  className="rounded-xl bg-slate-800 p-4"
-                >
-                  <p className="font-semibold text-white">{habit.name}</p>
-                  <p className="text-sm text-slate-400">
+                <li key={habit.name} className="stat-box">
+                  <p className="font-semibold">{habit.name}</p>
+                  <p className="text-sm muted">
                     Streak: {habit.streak} | Total: {habit.totalCompletions}
                   </p>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-slate-400">No burnout habits</p>
+            <p className="mt-4 muted">No burnout habits</p>
           )}
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
-        <p className="text-sm uppercase tracking-wider text-slate-400">
+      <section className="card mt-6">
+        <p className="text-sm uppercase tracking-wider muted">
           📊 Mood Correlation
         </p>
 
@@ -219,7 +199,7 @@ function Analytics() {
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400">
+                <tr className="border-b border-slate-700 muted">
                   <th className="py-3">Difficulty</th>
                   <th className="py-3">Average Mood</th>
                   <th className="py-3">Completions</th>
@@ -228,43 +208,33 @@ function Analytics() {
 
               <tbody>
                 {stats.mood.map((item) => (
-                  <tr
-                    key={item.difficulty}
-                    className="border-b border-slate-800"
-                  >
-                    <td className="py-3 capitalize text-white">
-                      {item.difficulty}
-                    </td>
+                  <tr key={item.difficulty} className="border-b border-slate-700">
+                    <td className="py-3 capitalize">{item.difficulty}</td>
                     <td className="py-3 text-emerald-400">
                       {item.averageMood}
                     </td>
-                    <td className="py-3 text-slate-300">
-                      {item.totalCompletions}
-                    </td>
+                    <td className="py-3 muted">{item.totalCompletions}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <p className="mt-4 text-slate-400">No mood data</p>
+          <p className="mt-4 muted">No mood data</p>
         )}
       </section>
 
-      <section className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
-        <p className="text-sm uppercase tracking-wider text-slate-400">
+      <section className="card mt-6">
+        <p className="text-sm uppercase tracking-wider muted">
           💤 Abandoned Habits
         </p>
 
         {stats.abandoned && stats.abandoned.length > 0 ? (
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
             {stats.abandoned.map((habit) => (
-              <li
-                key={habit.name}
-                className="rounded-xl bg-slate-800 p-4"
-              >
-                <p className="font-semibold text-white">{habit.name}</p>
-                <p className="text-sm text-slate-400">
+              <li key={habit.name} className="stat-box">
+                <p className="font-semibold">{habit.name}</p>
+                <p className="text-sm muted">
                   {habit.category} • Last completed: {habit.lastCompleted}
                 </p>
                 <p className="text-sm text-rose-400">
@@ -274,7 +244,7 @@ function Analytics() {
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-slate-400">No abandoned habits</p>
+          <p className="mt-4 muted">No abandoned habits</p>
         )}
       </section>
     </div>
