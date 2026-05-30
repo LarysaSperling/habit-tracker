@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
+import HabitChart from "../components/HabitChart";
 
 function Analytics() {
   const [stats, setStats] = useState({});
@@ -36,7 +37,7 @@ function Analytics() {
           bestDay: bestDay.data.data,
           bestMonth: bestMonth.data.data,
           abandoned: abandoned.data.data,
-          mood: mood.data.data,
+          mood: mood.data.data || [],
           perfectDay: perfectDay.data.data,
           goldenMean: goldenMean.data.data,
           burnout: burnout.data.data
@@ -53,12 +54,15 @@ function Analytics() {
   }, []);
 
   if (loading) return <h2>Loading analytics...</h2>;
-
   if (error) return <h2>{error}</h2>;
 
   return (
     <div>
       <h1>Analytics</h1>
+
+      {stats.mood && stats.mood.length > 0 && (
+        <HabitChart moodCorrelation={stats.mood} />
+      )}
 
       <div>
         <h3>Longest Streak</h3>
