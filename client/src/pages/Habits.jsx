@@ -52,14 +52,16 @@ function Habits() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && habits.length === 0 && <p>No habits found.</p>}
 
-      {habits.map((habit) => (
-        <HabitCard
-          key={habit._id}
-          habit={habit}
-          onHabitUpdated={fetchHabits}
-          onHabitDeleted={deleteHabit}
-        />
-      ))}
+     <div className="grid gap-6">
+  {habits.map((habit) => (
+    <HabitCard
+      key={habit._id}
+      habit={habit}
+      onHabitUpdated={fetchHabits}
+      onHabitDeleted={deleteHabit}
+    />
+  ))}
+</div>
     </div>
   );
 }
