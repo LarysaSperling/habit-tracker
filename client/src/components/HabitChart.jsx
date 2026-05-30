@@ -1,15 +1,12 @@
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  ArcElement,
   Tooltip,
   Legend
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function HabitChart({ moodCorrelation }) {
   const labels = moodCorrelation.map((item) => item.difficulty);
@@ -18,16 +15,36 @@ function HabitChart({ moodCorrelation }) {
     labels,
     datasets: [
       {
-        label: "Average mood",
-        data: moodCorrelation.map((item) => item.averageMood)
+        label: "Completions",
+        data: moodCorrelation.map((item) => item.totalCompletions),
+        backgroundColor: [
+          "#8b5cf6",
+          "#06b6d4",
+          "#10b981"
+        ],
+        borderWidth: 0
       }
     ]
   };
 
+  const options = {
+    plugins: {
+      legend: {
+        position: "bottom"
+      }
+    },
+    cutout: "65%"
+  };
+
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Mood by Difficulty</h2>
-      <Bar data={data} />
+      <h2 className="mb-4 text-2xl font-bold">
+        Completions by Difficulty
+      </h2>
+
+      <div className="mx-auto max-w-sm">
+        <Doughnut data={data} options={options} />
+      </div>
     </div>
   );
 }
