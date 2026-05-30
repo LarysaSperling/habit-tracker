@@ -16,7 +16,6 @@ function Chat() {
         setLoading(true);
 
         const response = await api.get("/messages");
-
         setMessages(response.data.data || []);
       } catch (error) {
         console.error(error);
@@ -84,17 +83,11 @@ function Chat() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-        <form
-          onSubmit={sendMessage}
-          className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg"
-        >
+        <form onSubmit={sendMessage} className="card">
           <h2 className="mb-6 text-2xl font-bold">New Message</h2>
 
           <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="mb-2 block text-sm text-slate-400"
-            >
+            <label htmlFor="username" className="mb-2 block text-sm muted">
               Username
             </label>
 
@@ -105,15 +98,12 @@ function Chat() {
               autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-emerald-500"
+              className="input"
             />
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="messageText"
-              className="mb-2 block text-sm text-slate-400"
-            >
+            <label htmlFor="messageText" className="mb-2 block text-sm muted">
               Message
             </label>
 
@@ -125,51 +115,41 @@ function Chat() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               rows="5"
-              className="w-full resize-none rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-emerald-500"
+              className="input resize-none"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white transition hover:bg-emerald-500"
-          >
+          <button type="submit" className="btn-success w-full">
             Send Message
           </button>
         </form>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
+        <section className="card">
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold">Messages</h2>
-              <p className="text-sm text-slate-400">
-                {messages.length} saved messages
-              </p>
+              <p className="text-sm muted">{messages.length} saved messages</p>
             </div>
 
-            <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-sm text-emerald-300">
+            <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-sm text-emerald-400">
               Live
             </span>
           </div>
 
-          {loading && <p className="text-slate-400">Loading messages...</p>}
+          {loading && <p className="muted">Loading messages...</p>}
 
           {!loading && messages.length === 0 && (
-            <p className="text-slate-400">No messages yet.</p>
+            <p className="muted">No messages yet.</p>
           )}
 
           <div className="space-y-4">
             {messages.map((message) => (
-              <div
-                key={message._id}
-                className="rounded-2xl bg-slate-800 p-4"
-              >
+              <div key={message._id} className="stat-box">
                 <div className="mb-2 flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-semibold text-white">
-                      {message.username}
-                    </p>
+                    <p className="font-semibold">{message.username}</p>
 
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs muted">
                       {message.createdAt
                         ? new Date(message.createdAt).toLocaleString()
                         : ""}
@@ -184,7 +164,7 @@ function Chat() {
                   </button>
                 </div>
 
-                <p className="text-slate-200">{message.text}</p>
+                <p>{message.text}</p>
               </div>
             ))}
           </div>
