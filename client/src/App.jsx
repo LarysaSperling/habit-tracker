@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { Toaster } from "react-hot-toast";
 
+import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Habits from "./pages/Habits";
 import Analytics from "./pages/Analytics";
@@ -20,6 +21,13 @@ function App() {
   return (
     <div className={darkMode ? "app app-dark" : "app app-light"}>
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000
+        }}
+      />
 
       <main className="mx-auto max-w-6xl px-6 py-8">
         <Routes>
