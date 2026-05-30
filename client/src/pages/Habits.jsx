@@ -9,6 +9,9 @@ function Habits() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState("");
+
   const fetchHabits = useCallback(async () => {
     try {
       setLoading(true);
@@ -30,9 +33,7 @@ function Habits() {
   }, [fetchHabits]);
 
   const deleteHabit = async (id) => {
-    const confirmDelete = window.confirm(
-      "Delete this habit?"
-    );
+    const confirmDelete = window.confirm("Delete this habit?");
 
     if (!confirmDelete) return;
 
@@ -45,12 +46,20 @@ function Habits() {
     }
   };
 
+  const filteredHabits = habits.filter((habit) => {
+    const categoryMatch =
+      !categoryFilter || habit.category === categoryFilter;
+
+    const difficultyMatch =
+      !difficultyFilter || habit.difficulty === difficultyFilter;
+
+    return categoryMatch && difficultyMatch;
+  });
+
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold">
-          Habits
-        </h1>
+        <h1 className="text-4xl font-bold">Habits</h1>
 
         <p className="mt-2 muted">
           Create, complete and track your daily habits.
@@ -58,6 +67,51 @@ function Habits() {
       </div>
 
       <HabitForm onHabitCreated={fetchHabits} />
+
+      <div className="card mb-6">
+        <h2 className="mb-4 text-xl font-bold">Filters</h2>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="categoryFilter" className="mb-2 block text-sm muted">
+              Category
+            </label>
+
+            <select
+              id="categoryFilter"
+              name="categoryFilter"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="input"
+            >
+              <option value="">All categories</option>
+              <option value="health">Health</option>
+              <option value="education">Education</option>
+              <option value="productivity">Productivity</option>
+              <option value="mindfulness">Mindfulness</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="difficultyFilter" className="mb-2 block text-sm muted">
+              Difficulty
+            </label>
+
+            <select
+              id="difficultyFilter"
+              name="difficultyFilter"
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value)}
+              className="input"
+            >
+              <option value="">All difficulties</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
       {loading && <Loader />}
 
@@ -67,18 +121,21 @@ function Habits() {
         </div>
       )}
 
-      {!loading &&
-        !error &&
-        habits.length === 0 && (
-          <div className="card muted">
-            No habits found. Create your first
-            habit above.
-          </div>
-        )}
+      {!loading && !error && habits.length === 0 && (
+        <div className="card muted">
+          No habits found. Create your first habit above.
+        </div>
+      )}
 
-      {!loading && habits.length > 0 && (
+      {!loading && !error && habits.length > 0 && filteredHabits.length === 0 && (
+        <div className="card muted">
+          No habits match selected filters.
+        </div>
+      )}
+
+      {!loading && filteredHabits.length > 0 && (
         <div className="grid gap-6">
-          {habits.map((habit) => (
+          {filteredHabits.map((habit) => (
             <HabitCard
               key={habit._id}
               habit={habit}

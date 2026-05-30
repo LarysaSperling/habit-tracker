@@ -8,6 +8,7 @@ import Habits from "./pages/Habits";
 import Analytics from "./pages/Analytics";
 import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
+import Footer from "./components/Footer";
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -39,6 +40,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }
