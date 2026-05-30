@@ -21,6 +21,7 @@ function HabitForm({ onHabitCreated }) {
       setDifficulty("easy");
 
       onHabitCreated();
+
       alert("Habit created successfully!");
     } catch (error) {
       console.error(error);
@@ -29,53 +30,89 @@ function HabitForm({ onHabitCreated }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create Habit</h2>
+    <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
+      <h2 className="mb-6 text-2xl font-bold">
+        Create New Habit
+      </h2>
 
-      <div>
-        <label htmlFor="habitName">Habit name</label>
-        <input
-          id="habitName"
-          name="habitName"
-          type="text"
-          placeholder="Enter habit name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="grid gap-4 md:grid-cols-3"
+      >
+        <div>
+          <label
+            htmlFor="habitName"
+            className="mb-2 block text-sm text-slate-400"
+          >
+            Habit Name
+          </label>
 
-      <div>
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          name="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="health">health</option>
-          <option value="education">education</option>
-          <option value="productivity">productivity</option>
-          <option value="mindfulness">mindfulness</option>
-        </select>
-      </div>
+          <input
+            id="habitName"
+            name="habitName"
+            type="text"
+            autoComplete="off"
+            placeholder="Enter habit name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+          />
+        </div>
 
-      <div>
-        <label htmlFor="difficulty">Difficulty</label>
-        <select
-          id="difficulty"
-          name="difficulty"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="easy">easy</option>
-          <option value="medium">medium</option>
-          <option value="hard">hard</option>
-        </select>
-      </div>
+        <div>
+          <label
+            htmlFor="category"
+            className="mb-2 block text-sm text-slate-400"
+          >
+            Category
+          </label>
 
-      <button type="submit">Create Habit</button>
-    </form>
+          <select
+            id="category"
+            name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+          >
+            <option value="health">Health</option>
+            <option value="education">Education</option>
+            <option value="productivity">Productivity</option>
+            <option value="mindfulness">Mindfulness</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="difficulty"
+            className="mb-2 block text-sm text-slate-400"
+          >
+            Difficulty
+          </label>
+
+          <select
+            id="difficulty"
+            name="difficulty"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+
+        <div className="md:col-span-3">
+          <button
+            type="submit"
+            className="rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-500"
+          >
+            Create Habit
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
