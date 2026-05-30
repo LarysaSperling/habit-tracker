@@ -21,27 +21,28 @@ function App() {
   }, [darkMode]);
 
   return (
-    <div className={darkMode ? "app app-dark" : "app app-light"}>
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+    <div className={darkMode ? "app app-dark flex min-h-screen flex-col" : "app app-light flex min-h-screen flex-col"}>
+  <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000
-        }}
-      />
+  <Toaster
+    position="top-right"
+    toastOptions={{
+      duration: 3000
+    }}
+  />
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/habits" element={<Habits />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
+  <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/habits" element={<Habits />} />
+      <Route path="/analytics" element={<Analytics />} />
+      <Route path="/chat" element={<Chat />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </main>
+
+  <Footer />
+</div>
   );
 }
 
