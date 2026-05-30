@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
@@ -8,10 +8,17 @@ import Analytics from "./pages/Analytics";
 import Chat from "./pages/Chat";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("darkMode");
+    return savedTheme !== null ? JSON.parse(savedTheme) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   return (
-   <div className={darkMode ? "app app-dark" : "app app-light"}>
+    <div className={darkMode ? "app app-dark" : "app app-light"}>
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
       <main className="mx-auto max-w-6xl px-6 py-8">

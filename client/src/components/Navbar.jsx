@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
 
 function Navbar({ darkMode, setDarkMode }) {
   const linkClass = ({ isActive }) =>
@@ -17,20 +18,38 @@ function Navbar({ darkMode, setDarkMode }) {
       }
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between">
-        <h1 className={darkMode ? "text-xl font-bold text-white" : "text-xl font-bold text-slate-950"}>
+        <h1
+          className={
+            darkMode
+              ? "text-xl font-bold text-white"
+              : "text-xl font-bold text-slate-950"
+          }
+        >
           Habit Tracker
         </h1>
 
         <div className="flex items-center gap-2">
-          <NavLink to="/" className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/habits" className={linkClass}>Habits</NavLink>
-          <NavLink to="/analytics" className={linkClass}>Analytics</NavLink>
-          <NavLink to="/chat" className={linkClass}>Chat</NavLink>
+          <NavLink to="/" className={linkClass}>
+            Dashboard
+          </NavLink>
+
+          <NavLink to="/habits" className={linkClass}>
+            Habits
+          </NavLink>
+
+          <NavLink to="/analytics" className={linkClass}>
+            Analytics
+          </NavLink>
+
+          <NavLink to="/chat" className={linkClass}>
+            Chat
+          </NavLink>
 
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="ml-3 rounded-xl bg-violet-600 px-4 py-2 font-semibold text-white hover:bg-violet-500"
+            className="ml-3 flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 font-semibold text-white hover:bg-violet-500"
           >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             {darkMode ? "Light" : "Dark"}
           </button>
         </div>
