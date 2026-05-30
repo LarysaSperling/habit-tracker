@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/api";
+import toast from "react-hot-toast";
 
 function HabitForm({ onHabitCreated }) {
   const [name, setName] = useState("");
@@ -21,10 +22,10 @@ function HabitForm({ onHabitCreated }) {
       setDifficulty("easy");
 
       onHabitCreated();
-      alert("Habit created successfully!");
+      toast.success("Habit created successfully!");
     } catch (error) {
       console.error(error);
-      alert("Error creating habit");
+      toast.error("Error creating habit");
     }
   };
 

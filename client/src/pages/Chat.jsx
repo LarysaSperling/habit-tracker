@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import api from "../api/api";
 import Loader from "../components/Loader";
+import EmptyState from "../components/EmptyState";
+import toast from "react-hot-toast";
 
 const socket = io("http://localhost:3333");
 
@@ -32,7 +34,7 @@ function Chat() {
     });
 
     socket.on("messageError", (error) => {
-      alert(error.message);
+    toast.error(error.message);
     });
 
     return () => {
@@ -45,7 +47,7 @@ function Chat() {
     e.preventDefault();
 
     if (!username.trim() || !text.trim()) {
-      alert("Username and message are required");
+      toast.error("Username and message are required");
       return;
     }
 
@@ -64,13 +66,13 @@ function Chat() {
 
     try {
       await api.delete(`/messages/${id}`);
-
+      toast.success("Message deleted!");
       setMessages((prevMessages) =>
         prevMessages.filter((message) => message._id !== id)
       );
     } catch (error) {
       console.error(error);
-      alert("Error deleting message");
+      toast.error("Error deleting message");
     }
   };
 
@@ -140,7 +142,11 @@ function Chat() {
           {loading && <Loader />}
 
           {!loading && messages.length === 0 && (
-            <p className="muted">No messages yet.</p>
+            <EmptyState
+                icon="💬"
+                title="No messages yet"
+                text="Send your first real-time message."
+            />
           )}
 
           <div className="space-y-4">

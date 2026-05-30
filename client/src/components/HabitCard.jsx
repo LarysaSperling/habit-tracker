@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/api";
+import toast from "react-hot-toast";
 
 function HabitCard({ habit, onHabitUpdated, onHabitDeleted }) {
   const [mood, setMood] = useState(5);
@@ -23,12 +24,11 @@ function HabitCard({ habit, onHabitUpdated, onHabitDeleted }) {
 
       setMood(5);
       setNotes("");
-
-      alert("Habit completed!");
+      toast.success("Habit completed!");
       onHabitUpdated();
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Error completing habit");
+      toast.error(error.response?.data?.message || "Error completing habit");
     }
   };
 
@@ -43,11 +43,11 @@ function HabitCard({ habit, onHabitUpdated, onHabitDeleted }) {
       });
 
       setIsEditing(false);
-      alert("Habit updated!");
+      toast.success("Habit updated!");
       onHabitUpdated();
     } catch (error) {
       console.error(error);
-      alert("Error updating habit");
+      toast.error("Error updating habit");
     }
   };
 

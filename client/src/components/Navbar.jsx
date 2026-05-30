@@ -25,17 +25,25 @@ function Navbar({ darkMode, setDarkMode }) {
       }
     >
       <nav className="relative mx-auto flex max-w-6xl items-center justify-between">
-        <NavLink
-          to="/"
-          onClick={closeMenu}
-          className={
-            darkMode
-              ? "text-xl font-bold text-white"
-              : "text-xl font-bold text-slate-950"
-          }
-        >
-          Habit Tracker
-        </NavLink>
+       <NavLink
+  to="/"
+  onClick={closeMenu}
+  className="flex items-center gap-3"
+>
+  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600 text-xl font-bold text-white">
+    ✓
+  </div>
+
+  <span
+    className={
+      darkMode
+        ? "text-xl font-bold text-white"
+        : "text-xl font-bold text-slate-950"
+    }
+  >
+    Habit Tracker
+  </span>
+</NavLink>
 
         <button
           type="button"

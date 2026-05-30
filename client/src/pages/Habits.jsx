@@ -3,6 +3,8 @@ import api from "../api/api";
 import HabitForm from "../components/HabitForm";
 import HabitCard from "../components/HabitCard";
 import Loader from "../components/Loader";
+import EmptyState from "../components/EmptyState";
+import toast from "react-hot-toast";
 
 function Habits() {
   const [habits, setHabits] = useState([]);
@@ -39,10 +41,11 @@ function Habits() {
 
     try {
       await api.delete(`/habits/${id}`);
+      toast.success("Habit deleted successfully!");
       await fetchHabits();
     } catch (error) {
       console.error(error);
-      alert("Error deleting habit");
+      toast.error("Error deleting habit");
     }
   };
 
@@ -122,15 +125,19 @@ function Habits() {
       )}
 
       {!loading && !error && habits.length === 0 && (
-        <div className="card muted">
-          No habits found. Create your first habit above.
-        </div>
+        <EmptyState
+            icon="🌱"
+            title="No habits yet"
+            text="Create your first habit and start tracking your progress."
+        />
       )}
 
       {!loading && !error && habits.length > 0 && filteredHabits.length === 0 && (
-        <div className="card muted">
-          No habits match selected filters.
-        </div>
+        <EmptyState
+           icon="🔍"
+          title="No matching habits"
+          text="Try changing the category or difficulty filter."
+        />
       )}
 
       {!loading && filteredHabits.length > 0 && (
