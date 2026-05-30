@@ -21,7 +21,6 @@ function HabitForm({ onHabitCreated }) {
       setDifficulty("easy");
 
       onHabitCreated();
-
       alert("Habit created successfully!");
     } catch (error) {
       console.error(error);
@@ -30,7 +29,7 @@ function HabitForm({ onHabitCreated }) {
   };
 
   return (
-    <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
+    <div className="card mb-8">
       <h2 className="mb-6 text-2xl font-bold">
         Create New Habit
       </h2>
@@ -40,10 +39,7 @@ function HabitForm({ onHabitCreated }) {
         className="grid gap-4 md:grid-cols-3"
       >
         <div>
-          <label
-            htmlFor="habitName"
-            className="mb-2 block text-sm text-slate-400"
-          >
+          <label htmlFor="habitName" className="mb-2 block text-sm muted">
             Habit Name
           </label>
 
@@ -56,15 +52,12 @@ function HabitForm({ onHabitCreated }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+            className="input"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="category"
-            className="mb-2 block text-sm text-slate-400"
-          >
+          <label htmlFor="category" className="mb-2 block text-sm muted">
             Category
           </label>
 
@@ -73,7 +66,7 @@ function HabitForm({ onHabitCreated }) {
             name="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+            className="input"
           >
             <option value="health">Health</option>
             <option value="education">Education</option>
@@ -83,10 +76,7 @@ function HabitForm({ onHabitCreated }) {
         </div>
 
         <div>
-          <label
-            htmlFor="difficulty"
-            className="mb-2 block text-sm text-slate-400"
-          >
+          <label htmlFor="difficulty" className="mb-2 block text-sm muted">
             Difficulty
           </label>
 
@@ -95,7 +85,7 @@ function HabitForm({ onHabitCreated }) {
             name="difficulty"
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-violet-500"
+            className="input"
           >
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
@@ -104,10 +94,7 @@ function HabitForm({ onHabitCreated }) {
         </div>
 
         <div className="md:col-span-3">
-          <button
-            type="submit"
-            className="rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-500"
-          >
+          <button type="submit" className="btn-primary">
             Create Habit
           </button>
         </div>
