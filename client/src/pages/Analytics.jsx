@@ -2,6 +2,17 @@ import { useEffect, useState } from "react";
 import api from "../api/api";
 import HabitChart from "../components/HabitChart";
 
+import {
+  Flame,
+  CalendarDays,
+  Trophy,
+  Star,
+  Scale,
+  AlertTriangle,
+  BarChart3,
+  Moon
+} from "lucide-react";
+
 function Analytics() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
@@ -68,8 +79,10 @@ function Analytics() {
 
   return (
     <div>
-      <section className="mb-10 rounded-3xl bg-gradient-to-r from-sky-600 to-violet-600 p-8 shadow-xl">
-        <h1 className="text-4xl font-bold text-white">Analytics</h1>
+      <section className="mb-10 rounded-3xl bg-gradient-to-r from-sky-600 to-violet-600 p-6 shadow-xl sm:p-8">
+        <h1 className="text-3xl font-bold text-white sm:text-4xl">
+          Analytics
+        </h1>
         <p className="mt-3 max-w-2xl text-sky-100">
           Explore your habit performance, mood patterns and productivity trends.
         </p>
@@ -81,24 +94,24 @@ function Analytics() {
         </div>
       )}
 
-      <section className="grid gap-6 md:grid-cols-2">
+      <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         <div className="card">
+          <Flame size={36} className="mb-4 text-orange-400" />
           <p className="text-sm uppercase tracking-wider muted">
-            🔥 Longest Streak
+            Longest Streak
           </p>
           <h2 className="mt-4 text-2xl font-bold">
             {stats.longest?.name || "No data"}
           </h2>
-          <p className="mt-2 text-5xl font-bold text-violet-400">
+          <p className="mt-2 text-5xl font-bold text-orange-400">
             {stats.longest?.streak || 0}
           </p>
           <p className="mt-1 text-sm muted">days</p>
         </div>
 
         <div className="card">
-          <p className="text-sm uppercase tracking-wider muted">
-            📅 Best Day
-          </p>
+          <CalendarDays size={36} className="mb-4 text-sky-400" />
+          <p className="text-sm uppercase tracking-wider muted">Best Day</p>
           <h2 className="mt-4 text-2xl font-bold">
             {stats.bestDay?.dayName || "No data"}
           </h2>
@@ -109,9 +122,8 @@ function Analytics() {
         </div>
 
         <div className="card">
-          <p className="text-sm uppercase tracking-wider muted">
-            🏆 Best Month
-          </p>
+          <Trophy size={36} className="mb-4 text-emerald-400" />
+          <p className="text-sm uppercase tracking-wider muted">Best Month</p>
           <h2 className="mt-4 text-2xl font-bold">
             {stats.bestMonth
               ? `${stats.bestMonth.monthName} ${stats.bestMonth.year}`
@@ -124,9 +136,8 @@ function Analytics() {
         </div>
 
         <div className="card">
-          <p className="text-sm uppercase tracking-wider muted">
-            ⭐ Perfect Day
-          </p>
+          <Star size={36} className="mb-4 text-amber-400" />
+          <p className="text-sm uppercase tracking-wider muted">Perfect Day</p>
 
           {stats.perfectDay ? (
             <>
@@ -146,9 +157,8 @@ function Analytics() {
         </div>
 
         <div className="card">
-          <p className="text-sm uppercase tracking-wider muted">
-            ⚖️ Golden Mean
-          </p>
+          <Scale size={36} className="mb-4 text-pink-400" />
+          <p className="text-sm uppercase tracking-wider muted">Golden Mean</p>
 
           {stats.goldenMean ? (
             <>
@@ -169,8 +179,9 @@ function Analytics() {
         </div>
 
         <div className="card">
+          <AlertTriangle size={36} className="mb-4 text-rose-400" />
           <p className="text-sm uppercase tracking-wider muted">
-            😵 Burnout Habits
+            Burnout Habits
           </p>
 
           {stats.burnout && stats.burnout.length > 0 ? (
@@ -191,13 +202,14 @@ function Analytics() {
       </section>
 
       <section className="card mt-6">
+        <BarChart3 size={36} className="mb-4 text-violet-400" />
         <p className="text-sm uppercase tracking-wider muted">
-          📊 Mood Correlation
+          Mood Correlation
         </p>
 
         {stats.mood && stats.mood.length > 0 ? (
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full text-left">
+            <table className="w-full min-w-[500px] text-left">
               <thead>
                 <tr className="border-b border-slate-700 muted">
                   <th className="py-3">Difficulty</th>
@@ -225,12 +237,13 @@ function Analytics() {
       </section>
 
       <section className="card mt-6">
+        <Moon size={36} className="mb-4 text-indigo-400" />
         <p className="text-sm uppercase tracking-wider muted">
-          💤 Abandoned Habits
+          Abandoned Habits
         </p>
 
         {stats.abandoned && stats.abandoned.length > 0 ? (
-          <ul className="mt-4 grid gap-3 md:grid-cols-2">
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {stats.abandoned.map((habit) => (
               <li key={habit.name} className="stat-box">
                 <p className="font-semibold">{habit.name}</p>
