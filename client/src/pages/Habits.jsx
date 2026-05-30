@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../api/api";
 import HabitForm from "../components/HabitForm";
 import HabitCard from "../components/HabitCard";
@@ -8,29 +8,29 @@ function Habits() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchHabits = async () => {
+  const fetchHabits = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
 
       const response = await api.get("/habits");
-      const habitsData = response.data.data || [];
 
-      setHabits(habitsData.filter(Boolean));
+      setHabits(response.data.data || []);
     } catch (error) {
       console.error(error);
       setError("Error loading habits");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchHabits();
-  }, []);
+  }, [fetchHabits]);
 
   const deleteHabit = async (id) => {
     const confirmDelete = window.confirm("Delete this habit?");
+
     if (!confirmDelete) return;
 
     try {
@@ -44,24 +44,45 @@ function Habits() {
 
   return (
     <div>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold">Habits</h1>
+        <p className="mt-2 text-slate-400">
+          Create, complete and track your daily habits.
+        </p>
+      </div>
+
       <HabitForm onHabitCreated={fetchHabits} />
 
-      <h1>Habits</h1>
+      {loading && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300">
+          Loading habits...
+        </div>
+      )}
 
-      {loading && <p>Loading habits...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && habits.length === 0 && <p>No habits found.</p>}
+      {error && (
+        <div className="rounded-2xl border border-rose-800 bg-rose-950 p-6 text-rose-300">
+          {error}
+        </div>
+      )}
 
-     <div className="grid gap-6">
-  {habits.map((habit) => (
-    <HabitCard
-      key={habit._id}
-      habit={habit}
-      onHabitUpdated={fetchHabits}
-      onHabitDeleted={deleteHabit}
-    />
-  ))}
-</div>
+      {!loading && !error && habits.length === 0 && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300">
+          No habits found. Create your first habit above.
+        </div>
+      )}
+
+      {!loading && habits.length > 0 && (
+        <div className="grid gap-6">
+          {habits.map((habit) => (
+            <HabitCard
+              key={habit._id}
+              habit={habit}
+              onHabitUpdated={fetchHabits}
+              onHabitDeleted={deleteHabit}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
