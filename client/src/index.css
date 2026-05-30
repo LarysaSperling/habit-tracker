@@ -25,6 +25,18 @@
     @apply border-slate-200 bg-white text-slate-950 hover:border-violet-400;
   }
 
+  .stat-box {
+    @apply rounded-xl p-4 transition;
+  }
+
+  .app-dark .stat-box {
+    @apply bg-slate-800/50;
+  }
+
+  .app-light .stat-box {
+    @apply bg-slate-100;
+  }
+
   .muted {
     @apply text-slate-400;
   }
