@@ -5,10 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import Habits from "./pages/Habits";
 import Analytics from "./pages/Analytics";
 import Chat from "./pages/Chat";
-
 function App() {
   return (
-    <>
+    <div className="min-h-screen bg-slate-950 text-white">
       <Navbar />
 
       <Routes>
@@ -17,7 +16,7 @@ function App() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/chat" element={<Chat />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
