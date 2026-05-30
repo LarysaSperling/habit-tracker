@@ -7,6 +7,7 @@ import {
   Flame,
   Smile
 } from "lucide-react";
+import Loader from "../components/Loader";
 
 function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
@@ -49,13 +50,9 @@ function Dashboard() {
         ).toFixed(1)
       : "0";
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-violet-500 border-t-transparent"></div>
-      </div>
-    );
-  }
+ if (loading) {
+  return <Loader />;
+}
 
   if (error) {
     return (

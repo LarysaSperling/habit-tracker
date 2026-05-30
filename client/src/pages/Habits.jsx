@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import api from "../api/api";
 import HabitForm from "../components/HabitForm";
 import HabitCard from "../components/HabitCard";
+import Loader from "../components/Loader";
 
 function Habits() {
   const [habits, setHabits] = useState([]);
@@ -58,11 +59,7 @@ function Habits() {
 
       <HabitForm onHabitCreated={fetchHabits} />
 
-      {loading && (
-        <div className="card">
-          Loading habits...
-        </div>
-      )}
+      {loading && <Loader />}
 
       {error && (
         <div className="card border-rose-800 text-rose-300">

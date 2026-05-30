@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import api from "../api/api";
+import Loader from "../components/Loader";
 
 const socket = io("http://localhost:3333");
 
@@ -136,7 +137,7 @@ function Chat() {
             </span>
           </div>
 
-          {loading && <p className="muted">Loading messages...</p>}
+          {loading && <Loader />}
 
           {!loading && messages.length === 0 && (
             <p className="muted">No messages yet.</p>

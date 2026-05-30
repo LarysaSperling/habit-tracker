@@ -12,6 +12,7 @@ import {
   BarChart3,
   Moon
 } from "lucide-react";
+import Loader from "../components/Loader";
 
 function Analytics() {
   const [stats, setStats] = useState({});
@@ -65,13 +66,9 @@ function Analytics() {
     loadAnalytics();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-violet-500 border-t-transparent"></div>
-      </div>
-    );
-  }
+ if (loading) {
+  return <Loader />;
+}
 
   if (error) {
     return <div className="card border-rose-800 text-rose-300">{error}</div>;
