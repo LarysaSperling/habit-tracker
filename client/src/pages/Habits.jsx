@@ -29,7 +29,9 @@ function Habits() {
   }, [fetchHabits]);
 
   const deleteHabit = async (id) => {
-    const confirmDelete = window.confirm("Delete this habit?");
+    const confirmDelete = window.confirm(
+      "Delete this habit?"
+    );
 
     if (!confirmDelete) return;
 
@@ -45,8 +47,11 @@ function Habits() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold">Habits</h1>
-        <p className="mt-2 text-slate-400">
+        <h1 className="text-4xl font-bold">
+          Habits
+        </h1>
+
+        <p className="mt-2 muted">
           Create, complete and track your daily habits.
         </p>
       </div>
@@ -54,22 +59,25 @@ function Habits() {
       <HabitForm onHabitCreated={fetchHabits} />
 
       {loading && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300">
+        <div className="card">
           Loading habits...
         </div>
       )}
 
       {error && (
-        <div className="rounded-2xl border border-rose-800 bg-rose-950 p-6 text-rose-300">
+        <div className="card border-rose-800 text-rose-300">
           {error}
         </div>
       )}
 
-      {!loading && !error && habits.length === 0 && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300">
-          No habits found. Create your first habit above.
-        </div>
-      )}
+      {!loading &&
+        !error &&
+        habits.length === 0 && (
+          <div className="card muted">
+            No habits found. Create your first
+            habit above.
+          </div>
+        )}
 
       {!loading && habits.length > 0 && (
         <div className="grid gap-6">
